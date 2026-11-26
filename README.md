@@ -13,3 +13,14 @@
 </p>
 
 Manage your secret GPG keys through portals.
+</div>
+
+## Usage
+
+```sh
+ellyx --summon-master --key <recipient> --portal /dev/k_666
+ellyx --summon-lesser --key <recipient> --portal /dev/k_666
+ellyx --summon-path ~/.gpg/my-key.asc
+ellyx --expulse --key <recipient> --portal /dev/k_666
+ellyx --dispell
+```
