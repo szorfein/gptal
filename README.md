@@ -15,12 +15,47 @@
 Manage your secret GPG keys through portals.
 </div>
 
+chezmoi can bootstrap your whole environment, the problem is when you use GPG to manage your "secret", you need to import your private key "from the dark" before making anything. This concern also github (private repository), duplicity, gpgtar, pass, gopass, and all tools which work with GPG. You can use rsync to restore your data (keys include, they need to be exported which require scripting only for this...) but it can be "very" long depending of your backup size.
+
+Ellyx offer a simple solution to get your keys faster, plug an USB, type `ellyx --summon-lesser -k <recipient> --portal /dev/sdc`, type a password and your keys are imported and ready to use.
+
+## Development
+
+- Alpha, (current stage)
+- Beta
+- Release
+
+#### Encryption
+
+I'll checking for a solution which not require "permission" and finally opt for [gocryptfs](https://nuetzlich.net/gocryptfs/), this tool has few advantages:
+
+- use FUSE, which allow user to use `mount`, `unmount` without privilege
+- ToMySelf: deal with "keep a copy of your master key in safe place?"
+
+Other options:
+
+- Luks, complicated to configure without [root permission](https://possiblelossofprecision.net/?p=300)
+- gpgtar, also use gpg, will don't work
+- EncFS, deprecated
+- EcryptFS, deprecated
+
 ## Usage
 
 ```sh
 ellyx --summon-master --key <recipient> --portal /dev/k_666
 ellyx --summon-lesser --key <recipient> --portal /dev/k_666
-ellyx --summon-path ~/.gpg/my-key.asc
+ellyx --summon-path ~/.gpg/my-key.zip
 ellyx --expulse --key <recipient> --portal /dev/k_666
 ellyx --dispell
 ```
+
+## Mount portal without privilege
+
+```sh
+ellyx --help-udev --portal /dev/k_666
+generated file >> /tmp/udev-rules
+```
+
+Save it as /etc/udev/rules.d/99-unlock-lucks.rules and reload all udev rules with
+
+    # udevadm control --reload-rules
