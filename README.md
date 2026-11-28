@@ -1,6 +1,10 @@
 <p align="center">
-<img src="https://github.com/szorfein/gptal/blob/main/.github/assets/gptal.png?raw=true" height="661" weight="530" />
+<img src="https://github.com/szorfein/gptal/blob/main/.github/assets/logo-search-grid-2x.png?raw=true" height="661" weight="530" />
+<!--
+<img src="https://github.com/szorfein/gptal/blob/main/.github/assets/download (5).jpeg?raw=true" height="661" weight="530" />
+<img src="https://github.com/szorfein/gptal/blob/main/.github/assets/download (4).jpeg?raw=true" height="661" weight="530" />
 <br />
+-->
 </p>
 
 <h1 align="center"></h1>
@@ -15,9 +19,16 @@
 Manage your secret GPG keys through portals.
 </div>
 
-chezmoi can bootstrap your whole environment, the problem is when you use GPG to manage your "secret", you need to import your private key "from the dark" before making anything. This concern also github (private repository), duplicity, gpgtar, pass, gopass, and all tools which work with GPG. You can use rsync to restore your data (keys include, they need to be exported which require scripting only for this...) but it can be "very" long depending of your backup size.
+chezmoi can bootstrap your entire environment. The problem is that when you use GPG to manage your "secrets", you need to import your private key "from the dark" before you can do anything. This also affect private Git repository, Duplicity, gpgtar, pass, gopass, and all tools that work with GPG. You can use rsync to restore your data (including keys, which need to be exported, a process that requires scripting) but this can take a "very" long time depending on the size of your backup.
 
-Ellyx offer a simple solution to get your keys faster, plug an USB, type `ellyx --summon-lesser -k <recipient> --portal /dev/sdc`, type a password and your keys are imported and ready to use.
+Ellyx offers a simple solution to get your keys faster, plug an USB, type `ellyx --summon-lesser <recipient> --portal /dev/sdc`, enter a password and your keys are imported and ready to use.
+
+## Features
+
+- Private Key Backup and Recovery with Encryption
+- Easy keys management allowing you to create subkeys with short expiring time (3month or less)
+- Create "lesser keys" which can be used everyday (keys with `sec#`)
+- Easy to use
 
 ## Development
 
@@ -39,17 +50,27 @@ Other options:
 - EncFS, deprecated
 - EcryptFS, deprecated
 
+## Install
+
+```
+sudo xbps-install -S go gnupg gocryptfs
+git clone https://github.com/szorfein/ellyx.git ~/.ellyx
+cd ~/.ellyx && make install
+```
+
+The Makefile install `ellyx` in `$HOME/bin` so no extra permission are needed
+
 ## Usage
 
 ```sh
-ellyx --summon-master --key <recipient> --portal /dev/k_666
-ellyx --summon-lesser --key <recipient> --portal /dev/k_666
+ellyx --summon-master <recipient> --portal /dev/k_666
+ellyx --summon-lesser <recipient> --portal /dev/k_666
 ellyx --summon-path ~/.gpg/my-key.zip
-ellyx --expulse --key <recipient> --portal /dev/k_666
+ellyx --expulse <recipient> --portal /dev/k_666
 ellyx --dispell
 ```
 
-## Mount portal without privilege
+## Mount (usb) portal without privilege
 
 ```sh
 ellyx --help-udev --portal /dev/k_666
